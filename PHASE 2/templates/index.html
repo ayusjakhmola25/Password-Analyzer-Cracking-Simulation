@@ -18,7 +18,7 @@
       <div class="card">
         <form method="post" class="form-row">
           <input type="text" name="password" placeholder="Enter password to check" required>
-          <input type="text" name="delay" placeholder="Delay per attempt (seconds) e.g. 0.2" value="{{ delay if delay is defined else '0.2' }}">
+          <input type="text" name="delay" placeholder="Delay per attempt (seconds) e.g. 0.2" value="{{ delay|default('0.2') }}">
           <button type="submit">Start Simulation</button>
           <button type="button" class="secondary" onclick="window.location.href='/'">Reset</button>
         </form>
@@ -28,7 +28,7 @@
           <div class="card">
             <div class="section-title">
               <h2>Linear Search (Brute-force)</h2>
-              <div class="meta">Time: {{ linear_time:.2f }}s</div>
+              <div class="meta">Time: {{ linear_time | round(2) }}s</div>
             </div>
             <table>
               <thead><tr><th>#</th><th>Password Tried</th><th>Result</th></tr></thead>
@@ -63,7 +63,7 @@
               </tbody>
             </table>
             <p class="small"><strong>{{ binary_message }}</strong></p>
-            <p class="small">Time: {{ binary_time:.2f }}s</p>
+            <p class="small">Time: {{ binary_time | round(2) }}s</p>
           </div>
         </div>
 
