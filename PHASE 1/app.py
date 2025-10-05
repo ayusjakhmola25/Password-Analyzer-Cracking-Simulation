@@ -3,11 +3,11 @@ from collections import deque
 
 app = Flask(__name__)
 
-# queue to store last 5 attempts
+
 history = deque(maxlen=5)
 
 def analyze_password(password):
-    # stack simulation: reversed password string
+    
     stack_sim = "".join(list(password)[::-1])
 
     result = {
