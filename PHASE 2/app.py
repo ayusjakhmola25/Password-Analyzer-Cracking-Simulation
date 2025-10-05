@@ -33,7 +33,8 @@ def linear_search(target, password_list, delay=0.2):
     return attempts, found, len(attempts), end - start
 
 def binary_search(target, password_list, delay=0.2):
-    arr = sorted(password_list)
+    # Binary search requires a sorted list
+    arr = sorted(password_list) 
     attempts = []
     low, high = 0, len(arr) - 1
     start = time.time()
@@ -44,7 +45,8 @@ def binary_search(target, password_list, delay=0.2):
         time.sleep(delay)
         if tried == target:
             break
-        if target < tried:
+        # Lexicographical comparison (string comparison)
+        if target < tried: 
             high = mid - 1
         else:
             low = mid + 1
@@ -91,5 +93,5 @@ def index():
     return render_template('index.html', **context)
 
 if __name__ == '__main__':
-    
-    app.run(debug=True)
+    # Debug=True is good for development but should be False in production
+    app.run(debug=True, port=5001)
