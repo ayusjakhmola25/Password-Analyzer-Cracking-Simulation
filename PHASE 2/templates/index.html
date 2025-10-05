@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Password Cracking Simulation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <div>
+          <h1>Password Cracking Simulation</h1>
+          <p class="sub">Dummy list: {{ password_list }}</p>
+        </div>
+      </header>
+
+      <div class="card">
+        <form method="post" class="form-row">
+          <input type="text" name="password" placeholder="Enter password to check" required>
+          <input type="text" name="delay" placeholder="Delay per attempt (seconds) e.g. 0.2" value="{{ delay if delay is defined else '0.2' }}">
+          <button type="submit">Start Simulation</button>
+          <button type="button" class="secondary" onclick="window.location.href='/'">Reset</button>
+        </form>
+
+        {% if linear_attempts is defined %}
+        <div class="grid">
+          <div class="card">
+            <div class="section-title">
+              <h2>Linear Search (Brute-force)</h2>
+              <div class="meta">Time: {{ linear_time:.2f }}s</div>
+            </div>
+            <table>
+              <thead><tr><th>#</th><th>Password Tried</th><th>Result</th></tr></thead>
+              <tbody>
+                {% for a in linear_attempts %}
+                <tr class="attempt-row">
+                  <td>{{ loop.index }}</td>
+                  <td>{{ a.tried }}</td>
+                  <td class="{{ 'result-success' if a.match else 'result-fail' }}">{{ 'Match' if a.match else 'Fail' }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p class="small"><strong>{{ linear_message }}</strong></p>
+          </div>
+
+          <div class="card">
+            <div class="section-title">
+              <h2>Binary Search (Optimized)</h2>
+              <div class="meta">Sorted list: {{ sorted_list }}</div>
+            </div>
+            <table>
+              <thead><tr><th>#</th><th>Password Tried (mid)</th><th>Result</th></tr></thead>
+              <tbody>
+                {% for a in binary_attempts %}
+                <tr class="attempt-row">
+                  <td>{{ loop.index }}</td>
+                  <td>{{ a.tried }}</td>
+                  <td class="{{ 'result-success' if a.match else 'result-fail' }}">{{ 'Match' if a.match else 'Fail' }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+            <p class="small"><strong>{{ binary_message }}</strong></p>
+            <p class="small">Time: {{ binary_time:.2f }}s</p>
+          </div>
+        </div>
+
+        <h3>History (last 5 checks)</h3>
+        <table>
+          <thead><tr><th>Entered Password</th><th>Linear</th><th>Binary</th></tr></thead>
+          <tbody>
+            {% for h in history %}
+            <tr>
+              <td>{{ h.password }}</td>
+              <td>{{ h.linear }}</td>
+              <td>{{ h.binary }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% endif %}
+      </div>
+
+      <footer>
+        <p class="sub">Tip: Binary search requires sorted list and compares lexicographically here.</p>
+      </footer>
+    </div>
+  </body>
+</html>
