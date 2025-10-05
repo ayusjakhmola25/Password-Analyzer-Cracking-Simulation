@@ -6,7 +6,16 @@ import os
 app = Flask(__name__)
 
 
-PASSWORD_LIST = ["123", "abc", "Abc123!", "P@ssw0rd"]
+PASSWORD_LIST = ["12345678", "password123", "qwerty", "admin", "test1", "user", "abc123", "111111", "000000", "p@ssw0rd",
+    "qazwsx", "asdfgh", "12341234", "myname", "Secret", "master", "dragon", "hello", "laptop", "access",
+    "login", "changeit", "rootuser", "guest1", "welcome", "Abcdef", "Test", "UserPass", "admin01", "password",
+    "123456", "PassWord", "User123", "Tester", "System", "dummy", "sample", "demo", "Demo123", "Secure",
+    "MyPass", "Pass1", "Pass2", "Pass3", "Pass4", "Pass5", "Pass6", "Pass7", "Pass8", "Pass9",
+    "1a2b3c", "3c4d5e", "5e6f7g", "7g8h9i", "9i0j1k", "k1j0i9", "i9h8g7", "g7f6e5", "e5d4c3", "c3b2a1",
+    "password!", "admin@", "test#", "user$", "abc%", "123^", "qwerty&", "asdf*", "zxcvbn(", "mnbvcxz)",
+    "apple", "banana", "orange", "grape", "melon", "cherry", "mango", "kiwi", "lime", "peach",
+    "Python", "Flask", "Django", "Coder", "Script", "WebDev", "Data", "Cloud", "Linux", "Windows",
+    "Home", "Work", "Office", "School", "Street", "House", "Car", "Bike", "Bus", "Train"]
 
 
 history = deque(maxlen=5)
