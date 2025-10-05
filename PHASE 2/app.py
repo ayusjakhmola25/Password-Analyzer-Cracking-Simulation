@@ -5,10 +5,10 @@ import os
 
 app = Flask(__name__)
 
-# Dummy password list
+
 PASSWORD_LIST = ["123", "abc", "Abc123!", "P@ssw0rd"]
 
-# Queue to store last 5 attempts
+
 history = deque(maxlen=5)
 
 def linear_search(target, password_list, delay=0.2):
@@ -48,7 +48,7 @@ def index():
     context = {"password_list": PASSWORD_LIST}
     if request.method == 'POST':
         password = request.form.get('password', '').strip()
-        # optional: custom delay from form
+       
         try:
             delay = float(request.form.get('delay', '0.2'))
             if delay < 0: delay = 0.2
@@ -82,5 +82,5 @@ def index():
     return render_template('index.html', **context)
 
 if __name__ == '__main__':
-    # ensure Flask can find static/templates when run
+    
     app.run(debug=True)
