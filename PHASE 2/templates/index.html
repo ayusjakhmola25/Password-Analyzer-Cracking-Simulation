@@ -5,16 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Password Security Tools</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text x='0' y='14'>🔒</text></svg>">
   </head>
   <body>
     <div class="container">
-      <header>
-        <div>
-          <h1>Password Security Tools</h1>
-          <p class="sub">A combined utility for password analysis and search simulation.</p>
-        </div>
-      </header>
       
+      <header class="main-header">
+        <div class="header-logo">
+            <span class="logo-icon">🔑</span>
+            <h1>Password Cracking & Analyzer Tool</h1>
+        </div>
+        <p class="sub">A combined utility for password analysis and search simulation for educational purposes.</p>
+      </header>
       <nav class="main-nav">
           <a id="search-link" href="#" class="nav-link" onclick="showTab('search')">Cracking Simulation</a>
           <a id="analyze-link" href="#" class="nav-link" onclick="showTab('analyze')">Strength Analyzer</a>
@@ -113,9 +115,12 @@
             </form>
 
             {% if analyze_result %}
+            
             <div class="result-box {% if analyze_result['strength']=='Strong' %}strong{% elif analyze_result['strength']=='Moderate' %}moderate{% else %}weak{% endif %}">
                 <h3 class="strength-title">Overall Strength: **{{ analyze_result['strength'] }}**</h3>
+                
                 <hr>
+                
                 <h4>Analysis Breakdown:</h4>
                 <ul>
                     <li>Length &ge; 8 &rarr; {{ "✅ Passed" if analyze_result['length'] else "❌ Failed (Needs 8+ characters)" }}</li>
@@ -124,6 +129,20 @@
                     <li>Contains Lowercase &rarr; {{ "✅ Passed" if analyze_result['lower'] else "❌ Failed (Needs a-z)" }}</li>
                     <li>Contains Special Char &rarr; {{ "✅ Passed" if analyze_result['special'] else "❌ Failed (Needs !@#...)" }}</li>
                 </ul>
+                
+                <hr>
+                <div class="crack-time-info">
+                    <h4>Estimated Cracking Time (Brute-Force)</h4>
+                    <p class="time-estimate">
+                        **{{ analyze_result['crack_time'] }}**
+                    </p>
+                    <p class="small">
+                        *Entropy (Randomness):* **{{ analyze_result['entropy_bits'] }}** bits
+                    </p>
+                    <p class="small">*Assuming a cracking speed of: {{ analyze_result['crack_speed_gph'] }}*</p>
+                </div>
+                
+                <hr>
                 <p><strong>Stack Simulation (Password Reversed):</strong> <code>{{ analyze_result['stack'] }}</code></p>
             </div>
             {% endif %}
@@ -143,10 +162,14 @@
           </div>
       </div>
 
-      <footer>
-        <p class="sub">Tip: Binary search requires sorted list and compares lexicographically here.</p>
+      <footer class="main-footer">
+          <p>&copy; 2025 Security Tools Project | Educational Simulation</p>
+          <div class="footer-meta">
+              <span>**Built for Learning & Demonstration**</span>
+              <span>Disclaimer: This tool uses a small, fixed list for demonstration.</span>
+          </div>
       </footer>
-    </div>
+      </div>
     
     <script>
         // JavaScript to handle tab switching

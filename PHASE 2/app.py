@@ -3,6 +3,7 @@ from collections import deque
 import time
 import re
 import os
+import math # <--- ADDED: math is now needed for log2
 
 app = Flask(__name__)
 
@@ -31,7 +32,7 @@ CRITERIA = {
     'special': lambda p: bool(re.search(r'[!@#$%^&*()_+=\-{}[\]:;"\'<,>.?/`~]', p))
 }
 
-# --- Search Simulation Functions ---
+# --- Search Simulation Functions (Unchanged) ---
 
 def linear_search(target, password_list, delay=0.2):
     attempts = []
@@ -65,9 +66,52 @@ def binary_search(target, password_list, delay=0.2):
     found = any(a["match"] for a in attempts)
     return arr, attempts, found, len(attempts), end - start
 
-# --- Strength Analyzer Functions ---
+# --- New/Modified Strength Analyzer Functions ---
 
-def analyze_password_strength(password):
+def calculate_entropy(password):
+    """Calculates password entropy in bits."""
+    length = len(password)
+    if length == 0:
+        return 0.0
+
+    # Determine character set size (N)
+    N = 0
+    if re.search(r'[a-z]', password):
+        N += 26  # Lowercase
+    if re.search(r'[A-Z]', password):
+        N += 26  # Uppercase
+    if re.search(r'\d', password):
+        N += 10  # Digits
+    # Using a common special character set size for simplicity (approximate)
+    if re.search(r'[!@#$%^&*()_+=\-{}[\]:;"\'<,>.?/`~]', password):
+        N += 32  # Special characters (approx. 32 common ones)
+
+    if N == 0:
+        return 0.0
+    
+    # Entropy formula: H = L * log2(N)
+    entropy_bits = length * math.log2(N)
+    return entropy_bits
+
+def format_crack_time(seconds):
+    """Formats a large number of seconds into human-readable time."""
+    if seconds < 60:
+        return f"{seconds:.2f} seconds"
+    if seconds < 3600:
+        minutes = seconds / 60
+        return f"{minutes:.1f} minutes"
+    if seconds < 86400:
+        hours = seconds / 3600
+        return f"{hours:.1f} hours"
+    if seconds < 31536000:
+        days = seconds / 86400
+        return f"{days:.1f} days"
+    
+    years = seconds / 31536000
+    return f"{years:.1f} years"
+
+def analyze_password_strength(password, crack_speed=10**9):
+    """Analyzes strength, calculates entropy, and estimates crack time."""
     results = {
         name: check(password)
         for name, check in CRITERIA.items()
@@ -82,10 +126,27 @@ def analyze_password_strength(password):
     else:
         strength = "Weak"
 
+    entropy_bits = calculate_entropy(password)
+    
+    # Calculate total possible combinations (2^Entropy)
+    total_combinations = 2**entropy_bits
+    
+    # Estimate time to crack (seconds)
+    # Assumes a constant crack speed (e.g., 1 billion guesses per second)
+    if crack_speed > 0:
+        # Time = Combinations / Crack_Speed
+        time_seconds = total_combinations / crack_speed
+        crack_time_readable = format_crack_time(time_seconds)
+    else:
+        crack_time_readable = "N/A"
+
     stack_sim = "".join(reversed(password))
     
     results['strength'] = strength
     results['stack'] = stack_sim
+    results['entropy_bits'] = round(entropy_bits, 2)
+    results['crack_time'] = crack_time_readable
+    results['crack_speed_gph'] = f"{crack_speed/10**9} Billion / second" # For display
     
     return results
 
@@ -141,13 +202,13 @@ def index():
             context['active_tab'] = 'analyze'
             password = request.form.get('analyze_password', '')
             
-            result = analyze_password_strength(password)
+            # Using default crack speed of 10^9
+            result = analyze_password_strength(password) 
             
             history_item = {
                 'password': password,
                 'strength': result['strength']
             }
-            # *** Corrected: Changed append to appendleft to match UI list order (newest first) ***
             analyze_history.appendleft(history_item)
             
             context['analyze_result'] = result
