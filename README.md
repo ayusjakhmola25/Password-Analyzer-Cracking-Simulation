@@ -1,59 +1,134 @@
 # 🔑 Password Cracking & Analyzer Tool
 
+![GitHub Stars](https://img.shields.io/github/stars/your-username/password-security-lab?style=social)
 [![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)](https://www.python.org/)
 [![Flask](https://img.shields.io/badge/Flask-Framework-black?logo=flask)](https://flask.palletsprojects.com/)
 [![License](https://img.shields.io/badge/License-MIT-green)](https://opensource.org/licenses/MIT)
 
-> **💡 This project is a hands-on web utility demonstrating core principles of password security, built with Python and Flask.**
+> **💡 Unlock the secrets of password security!** This web utility, built with **Python & Flask**, offers an interactive deep-dive into password cracking simulations and robust strength analysis. Discover how strong your passwords truly are and the science behind their security.
 
 ---
 
-## ✨ Why This Tool? (मुख्य विशेषताएँ)
+## ✨ Features That Empower You (मुख्य विशेषताएँ)
 
-This educational tool is split into two primary, interactive components to provide a full-spectrum view of password security.
+Our tool is divided into two powerful, interconnected sections, each designed to educate and inform.
 
-### 🔬 Strength Analyzer & Security Assessment
+### 🔬 Password Strength Analyzer: Your Digital Security Report
 
-Get instant, detailed feedback on password robustness and security metrics.
+Get instant, comprehensive feedback on your password's resilience.
 
 | Feature | Description |
-| :--- | :--- |
-| ✅ **Criteria-Based Scoring** | Evaluates against 5 criteria (Length $\ge 8$, Uppercase, Lowercase, Digit, Symbol). |
-| 🏆 **Strength Tiers** | Categorizes passwords as **Weak** 🔴, **Moderate** 🟠, or **Strong** 🟢. |
-| ⏳ **Estimated Crack Time** | Calculates theoretical **Entropy** and estimates brute-force time with modern hardware assumptions. |
-| 💾 **Dynamic Dictionary** | Any analyzed password is automatically **saved to the dictionary** (`password.txt`). |
-| 📊 **Data Structure Demo** | Showcases practical use of a **History Queue** (`deque`) and a **Stack Simulation**. |
+| :------------------------- | :------------------------------------------------------------------------------------------------------- |
+| ✅ **5-Point Scoring** | Evaluates passwords against 5 critical criteria: **Length ($\ge 8$), Uppercase, Lowercase, Digit, Symbol.** |
+| 🏆 **Intuitive Tiers** | Categorizes strength as **Strong** 🟢, **Moderate** 🟠, or **Weak** 🔴 for quick understanding.             |
+| ⏳ **Real-time Crack Time** | Calculates theoretical **Entropy** and estimates brute-force time using modern hardware assumptions.      |
+| 💾 **Dynamic Dictionary** | Every analyzed password is **automatically saved** to `password.txt`, enhancing future simulations!        |
+| 📚 **Data Structure Demo** | Witness the practical application of a **History Queue** (`collections.deque`) and a **Stack Simulation**. |
 
-### ⚡ Cracking Simulation (हमले का प्रदर्शन)
+### ⚡ Cracking Simulation: The Race Against Time
 
-Visually compare attack efficiency to understand the importance of complexity.
+Understand the efficiency of password attacks by seeing them in action.
 
-* **Algorithm Comparison:** Side-by-side execution of **Linear Search ($O(n)$)** vs. **Binary Search ($O(\log n)$)**.
-* **Performance Metrics:** Observe the dramatic difference in **Number of Attempts** and **Time Taken** to find the target password.
-
----
-
-## 🛠️ Technology Stack (तकनीकी जानकारी)
-
-| Component | Technology | Role |
-| :--- | :--- | :--- |
-| **Backend Logic** | **Python 3.8+** | Core algorithms and strength calculation. |
-| **Web Framework** | **Flask** | Lightweight server for routing and web application. |
-| **Data Structures** | **`collections.deque`** | Efficiently manages the history queue (FIFO). |
-| **Frontend** | **HTML5, Custom CSS3** | Sleek, professional dark-themed UI/UX. |
+* 🚀 **Algorithm Showdown:** Visually compare **Linear Search** ($O(n)$ - brute-force) against **Binary Search** ($O(\log n)$ - optimized) on our dynamic dictionary.
+* ⏱️ **Performance Metrics:** Witness the dramatic difference in **"Number of Attempts"** and **"Time Taken"** between algorithms. It's a clear lesson in computational efficiency!
 
 ---
 
-## 🚀 Getting Started (सेटअप और इंस्टॉलेशन)
+## 🏗️ Technology Stack (तकनीकी आधार)
 
-Follow these simple steps to run the application locally.
+Built with robust and popular technologies to ensure a smooth and educational experience.
+
+| Component         | Technology              | Role                                                                |
+| :---------------- | :---------------------- | :------------------------------------------------------------------ |
+| **Backend Core** | **Python 3.8+** | Powers all logic, algorithms, and security calculations.            |
+| **Web Framework** | **Flask** | The micro-framework handling web routing and serving.               |
+| **Data Handling** | **`collections.deque`** | Efficiently manages the real-time history queue (FIFO).             |
+| **Frontend UI** | **HTML5, Custom CSS3** | Delivers a sleek, responsive, and professional dark-themed interface. |
+
+---
+
+## 🚀 Quick Start (शुरू करने के लिए)
+
+Get the Password Cracking & Analyzer Tool up and running in minutes!
 
 ### Prerequisites (आवश्यकताएँ)
 
-You must have **Python 3.x** installed.
+Make sure you have **Python 3.x** installed on your system.
 
-### 1. Clone the repository
+### 1\. Clone the Repository
 
 ```bash
 git clone [https://github.com/your-username/password-security-lab.git](https://github.com/your-username/password-security-lab.git)
 cd password-security-lab
+```
+> _(Remember to replace `your-username` with your actual GitHub username!)_
+
+### 2\. Set Up Your Environment
+
+Create and activate a virtual environment to manage dependencies cleanly.
+
+```bash
+python -m venv venv
+# For Linux/macOS
+source venv/bin/activate
+# For Windows (Command Prompt)
+.\venv\Scripts\activate
+```
+
+### 3\. Install Dependencies
+
+Only Flask is required!
+
+```bash
+pip install Flask
+```
+
+### 4\. Launch the Application
+
+Run the Flask server from your project root:
+
+```bash
+python app.py
+```
+
+🎉 The application will now be live in your browser at: **`http://127.0.0.1:5001/`**
+
+---
+
+## 🎯 How To Use (उपयोग के निर्देश)
+
+### 📊 Strength Analyzer
+
+1.  Navigate to the **Strength Analyzer** tab.
+2.  Type any password you wish to evaluate into the input field.
+3.  Click **"Analyze Password"**.
+4.  Observe its detailed **Strength Rating**, **Estimated Crack Time**, and watch it automatically appear in your **History Queue** and the internal dictionary!
+
+### ⚙️ Cracking Simulation
+
+1.  Switch to the **Cracking Simulation** tab.
+2.  Enter a password. (For best results, use a password already in `password.txt` – either a default one or one you just analyzed).
+3.  Click **"Start Simulation"**.
+4.  Witness the powerful visual comparison as Linear Search and Binary Search race to find your password, highlighting the stark difference in efficiency!
+
+---
+
+## 🤝 Contribute To The Project (योगदान करें)
+
+Your contributions make the open-source community thrive! We welcome all improvements.
+
+1.  **Fork** the Project.
+2.  Create your Feature Branch (`git checkout -b feature/AmazingFeature`).
+3.  **Commit** your Changes (`git commit -m 'Add some AmazingFeature'`).
+4.  **Push** to the Branch (`git push origin feature/AmazingFeature`).
+5.  Open a **Pull Request**.
+
+---
+
+## 📜 License
+
+Distributed under the MIT License. See the `LICENSE` file for more information.
+
+<p align="center">
+  Built with 💙 for Cybersecurity Education
+</p>
