@@ -9,7 +9,7 @@
 
 ---
 
-## ✨ Features That Empower You (मुख्य विशेषताएँ)
+## ✨ Features That Empower You 
 
 Our tool is divided into two powerful, interconnected sections, each designed to educate and inform.
 
@@ -34,7 +34,7 @@ Understand the efficiency of password attacks by seeing them in action.
 
 ---
 
-## 🏗️ Technology Stack (तकनीकी आधार)
+## 🏗️ Technology Stack 
 
 Built with robust and popular technologies to ensure a smooth and educational experience.
 
@@ -47,11 +47,11 @@ Built with robust and popular technologies to ensure a smooth and educational ex
 
 ---
 
-## 🚀 Quick Start (शुरू करने के लिए)
+## 🚀 Quick Start 
 
 Get the Password Cracking & Analyzer Tool up and running in minutes!
 
-### Prerequisites (आवश्यकताएँ)
+### Prerequisites 
 
 Make sure you have **Python 3.x** installed on your system.
 
@@ -95,7 +95,7 @@ python app.py
 
 ---
 
-## 🎯 How To Use (उपयोग के निर्देश)
+## 🎯 How To Use 
 
 ### 📊 Strength Analyzer
 
@@ -113,7 +113,7 @@ python app.py
 
 ---
 
-## 🤝 Contribute To The Project (योगदान करें)
+## 🤝 Contribute To The Project 
 
 Your contributions make the open-source community thrive! We welcome all improvements.
 
