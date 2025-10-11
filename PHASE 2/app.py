@@ -3,26 +3,38 @@ from collections import deque
 import time
 import re
 import os
-import math # <--- ADDED: math is now needed for log2
+import math
 
 app = Flask(__name__)
 
 # --- Data & History ---
-PASSWORD_LIST = ["12345678", "password123", "qwerty", "admin", "test1", "user", "abc123", "111111", "000000", "p@ssw0rd",
-    "qazwsx", "asdfgh", "12341234", "myname", "Secret", "master", "dragon", "hello", "laptop", "access",
-    "login", "changeit", "rootuser", "guest1", "welcome", "Abcdef", "Test", "UserPass", "admin01", "password",
-    "123456", "PassWord", "User123", "Tester", "System", "dummy", "sample", "demo", "Demo123", "Secure",
-    "MyPass", "Pass1", "Pass2", "Pass3", "Pass4", "Pass5", "Pass6", "Pass7", "Pass8", "Pass9",
-    "1a2b3c", "3c4d5e", "5e6f7g", "7g8h9i", "9i0j1k", "k1j0i9", "i9h8g7", "g7f6e5", "e5d4c3", "c3b2a1",
-    "password!", "admin@", "test#", "user$", "abc%", "123^", "qwerty&", "asdf*", "zxcvbn(", "mnbvcxz)",
-    "apple", "banana", "orange", "grape", "melon", "cherry", "mango", "kiwi", "lime", "peach",
-    "Python", "Flask", "Django", "Coder", "Script", "WebDev", "Data", "Cloud", "Linux", "Windows",
-    "Home", "Work", "Office", "School", "Street", "House", "Car", "Bike", "Bus", "Train"]
+# New constant to define the file path
+ANALYZER_STORAGE_FILE = 'password.txt'
+
+# --- MODIFICATION: Function to load passwords from password.txt ---
+def load_password_list():
+    """Reads passwords from password.txt, stripping whitespace and filtering out empty lines/comments."""
+    try:
+        with open(ANALYZER_STORAGE_FILE, 'r') as f:
+            # Read lines, strip whitespace, and filter out comments (#) and empty lines
+            passwords = [
+                line.strip() 
+                for line in f 
+                if line.strip() and not line.strip().startswith('#')
+            ]
+        return passwords
+    except FileNotFoundError:
+        print(f"Warning: {ANALYZER_STORAGE_FILE} not found. Cracking simulation will use an empty list.")
+        return []
+
+# The PASSWORD_LIST is now dynamically loaded on every request (or you can load it once if performance is critical)
+# For simplicity and to include newly saved passwords, we will call it inside the route or make it a global call.
 
 # History for Search Simulation (Newest to the left/top)
 search_history = deque(maxlen=5)
 # History for Strength Analyzer (Changed to appendleft for newest to the top)
 analyze_history = deque(maxlen=5)
+
 
 CRITERIA = {
     'length': lambda p: len(p) >= 8,
@@ -66,7 +78,28 @@ def binary_search(target, password_list, delay=0.2):
     found = any(a["match"] for a in attempts)
     return arr, attempts, found, len(attempts), end - start
 
-# --- New/Modified Strength Analyzer Functions ---
+# --- Function to log analyzed password to password.txt (From previous step) ---
+def log_analyzed_password(password):
+    """Appends the analyzed password to the password.txt file if it's not already present."""
+    if not password:
+        return
+    
+    try:
+        # Read existing passwords to check for duplicates
+        with open(ANALYZER_STORAGE_FILE, 'r') as f:
+            existing_passwords = set(line.strip() for line in f)
+    except FileNotFoundError:
+        existing_passwords = set()
+
+    if password not in existing_passwords:
+        try:
+            with open(ANALYZER_STORAGE_FILE, 'a') as f:
+                # Add a newline character before appending the new password
+                f.write(f"\n{password}")
+        except Exception as e:
+            print(f"Error writing to password.txt: {e}")
+
+# --- Strength Analyzer Functions (Unchanged) ---
 
 def calculate_entropy(password):
     """Calculates password entropy in bits."""
@@ -74,22 +107,19 @@ def calculate_entropy(password):
     if length == 0:
         return 0.0
 
-    # Determine character set size (N)
     N = 0
     if re.search(r'[a-z]', password):
-        N += 26  # Lowercase
+        N += 26
     if re.search(r'[A-Z]', password):
-        N += 26  # Uppercase
+        N += 26
     if re.search(r'\d', password):
-        N += 10  # Digits
-    # Using a common special character set size for simplicity (approximate)
+        N += 10
     if re.search(r'[!@#$%^&*()_+=\-{}[\]:;"\'<,>.?/`~]', password):
-        N += 32  # Special characters (approx. 32 common ones)
+        N += 32
 
     if N == 0:
         return 0.0
     
-    # Entropy formula: H = L * log2(N)
     entropy_bits = length * math.log2(N)
     return entropy_bits
 
@@ -127,14 +157,9 @@ def analyze_password_strength(password, crack_speed=10**9):
         strength = "Weak"
 
     entropy_bits = calculate_entropy(password)
-    
-    # Calculate total possible combinations (2^Entropy)
     total_combinations = 2**entropy_bits
     
-    # Estimate time to crack (seconds)
-    # Assumes a constant crack speed (e.g., 1 billion guesses per second)
     if crack_speed > 0:
-        # Time = Combinations / Crack_Speed
         time_seconds = total_combinations / crack_speed
         crack_time_readable = format_crack_time(time_seconds)
     else:
@@ -146,7 +171,7 @@ def analyze_password_strength(password, crack_speed=10**9):
     results['stack'] = stack_sim
     results['entropy_bits'] = round(entropy_bits, 2)
     results['crack_time'] = crack_time_readable
-    results['crack_speed_gph'] = f"{crack_speed/10**9} Billion / second" # For display
+    results['crack_speed_gph'] = f"{crack_speed/10**9} Billion / second"
     
     return results
 
@@ -154,8 +179,11 @@ def analyze_password_strength(password, crack_speed=10**9):
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
+    # --- MODIFICATION: Load passwords here to ensure the list is always up-to-date ---
+    PASSWORD_LIST = load_password_list()
+    
     context = {
-        'list_size': len(PASSWORD_LIST),
+        'list_size': len(PASSWORD_LIST), # This size is now the number of passwords in password.txt
         'search_history': list(search_history),
         'analyze_history': list(analyze_history),
         'active_tab': 'search' # Default tab on GET
@@ -174,6 +202,7 @@ def index():
             except:
                 delay = 0.2
 
+            # PASSWORD_LIST is used here, which is loaded from password.txt
             linear_attempts, linear_found, linear_count, linear_time = linear_search(password, PASSWORD_LIST, delay=delay)
             sorted_list, binary_attempts, binary_found, binary_count, binary_time = binary_search(password, PASSWORD_LIST, delay=delay)
 
@@ -197,12 +226,16 @@ def index():
                 "delay": delay
             })
             context['search_history'] = list(search_history)
+            context['list_size'] = len(PASSWORD_LIST) # Update list size in context
 
         elif form_type == 'strength_analyzer':
             context['active_tab'] = 'analyze'
             password = request.form.get('analyze_password', '')
             
-            # Using default crack speed of 10^9
+            # 1. Store the password in password.txt (Saves it for future cracking simulations)
+            log_analyzed_password(password)
+            
+            # 2. Analyze the password
             result = analyze_password_strength(password) 
             
             history_item = {
