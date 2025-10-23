@@ -177,6 +177,23 @@ tbody td{padding:var(--cell-pad);border-top:1px solid rgba(255,255,255,0.08);fon
 }
 
 
+/* Progress Bar Styles */
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    transition: width 0.3s ease, background-color 0.3s ease;
+    border-radius: 10px;
+}
+
 /* responsive */
 @media (max-width:900px){
   .grid{grid-template-columns:1fr}

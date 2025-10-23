@@ -222,6 +222,8 @@ def index():
                 "binary_message": binary_message,
                 "linear_time": linear_time,
                 "binary_time": binary_time,
+                "linear_count": linear_count,
+                "binary_count": binary_count,
                 "sorted_list": sorted_list,
                 "delay": delay
             })
